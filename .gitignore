@@ -39,3 +39,18 @@
 
 # debug information files
 *.dwo
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+*.egg
+*.mp4
+*.engine
+
+# Test videos (download from Google Drive)
+python_test/videos/*.mp4
