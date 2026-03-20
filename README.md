@@ -18,6 +18,19 @@ Native GStreamer plugins that integrate **SAHI** (Slicing Aided Hyper Inference)
 nvstreammux → nvsahipreprocess → nvinfer → nvsahipostprocess → nvtracker → nvdsosd
 ```
 
+## What Makes It Different
+
+DeepStream SAHI does not run as a separate Python inference workflow. Slicing,
+inference, and post-processing run as native GStreamer plugins inside the
+DeepStream pipeline, keeping the full path close to GPU memory.
+
+- **TensorRT-native inference** through `nvinfer` for lower latency and higher throughput.
+- **Dynamic multi-stream support** with `nvmultiurisrcbin`, including URI-based sources and runtime add/remove workflows.
+- **Full DeepStream compatibility** with tracking, analytics, messaging, and on-screen display components.
+
+This makes SAHI a production-friendly DeepStream building block rather than an
+external add-on around the pipeline.
+
 ---
 
 ## Results
