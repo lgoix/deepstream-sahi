@@ -176,29 +176,25 @@ backup_if_exists() {
     fi
 }
 
-if [[ "$DS_MAJOR" -eq 8 ]]; then
-    backup_if_exists "${DS_SOURCES}/libs/nvdsinfer"
-fi
+backup_if_exists "${DS_SOURCES}/libs/nvdsinfer"
 backup_if_exists "${DS_SOURCES}/libs/nvdsinfer_yolo"
 
 info "Copying SAHI plugins to ${DS_SOURCES}/gst-plugins/"
 cp -r "${REPO_SOURCES}/gst-plugins/gst-nvsahipreprocess"  "${DS_SOURCES}/gst-plugins/"
 cp -r "${REPO_SOURCES}/gst-plugins/gst-nvsahipostprocess" "${DS_SOURCES}/gst-plugins/"
 
-info "Copying modified libs to ${DS_SOURCES}/libs/"
-if [[ "$DS_MAJOR" -eq 8 ]]; then
-    cp -r "${REPO_SOURCES}/libs/nvdsinfer"      "${DS_SOURCES}/libs/"
-fi
+NVDSINFER_SRC="${REPO_SOURCES}/libs/nvdsinfer_${DS_MAJOR}.0"
+[[ -d "$NVDSINFER_SRC" ]] || error "nvdsinfer source for DS ${DS_MAJOR}.0 not found at ${NVDSINFER_SRC}"
+
+info "Copying modified libs to ${DS_SOURCES}/libs/ (using nvdsinfer_${DS_MAJOR}.0)"
+rm -rf "${DS_SOURCES}/libs/nvdsinfer"
+cp -r "$NVDSINFER_SRC" "${DS_SOURCES}/libs/nvdsinfer"
 cp -r "${REPO_SOURCES}/libs/nvdsinfer_yolo"  "${DS_SOURCES}/libs/"
 
-if [[ "$DS_MAJOR" -eq 8 ]]; then
-    info "Building nvdsinfer... (DS 8.x only)"
-    make -C "${DS_SOURCES}/libs/nvdsinfer" clean
-    make -C "${DS_SOURCES}/libs/nvdsinfer" -j"$(nproc)" CUDA_VER="${CUDA_VER}"
-    make -C "${DS_SOURCES}/libs/nvdsinfer" install CUDA_VER="${CUDA_VER}"
-else
-    info "Skipping nvdsinfer build (not needed on DS ${DS_VERSION})"
-fi
+info "Building nvdsinfer (DS ${DS_VERSION})..."
+make -C "${DS_SOURCES}/libs/nvdsinfer" clean
+make -C "${DS_SOURCES}/libs/nvdsinfer" -j"$(nproc)" CUDA_VER="${CUDA_VER}"
+make -C "${DS_SOURCES}/libs/nvdsinfer" install CUDA_VER="${CUDA_VER}"
 
 info "Building nvdsinfer_yolo..."
 make -C "${DS_SOURCES}/libs/nvdsinfer_yolo" clean

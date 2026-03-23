@@ -15,8 +15,8 @@ Choose the command that matches your environment. Both DeepStream 8.x and 9.x ar
 
 | DeepStream | Container Image |
 |------------|----------------|
-| 9.x | `nvcr.io/nvidia/deepstream:9.0-triton-multiarch` |
-| 8.x | `nvcr.io/nvidia/deepstream:8.0-triton-multiarch` |
+| 9.0 | `nvcr.io/nvidia/deepstream:9.0-triton-multiarch` |
+| 8.0 | `nvcr.io/nvidia/deepstream:8.0-triton-multiarch` |
 
 ### WSL2 (Windows Subsystem for Linux)
 

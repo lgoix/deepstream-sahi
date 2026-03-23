@@ -1,7 +1,7 @@
 # DeepStream SAHI
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![DeepStream](https://img.shields.io/badge/NVIDIA-DeepStream%208.x%20|%209.x-76B900?logo=nvidia)](https://developer.nvidia.com/deepstream-sdk)
+[![DeepStream](https://img.shields.io/badge/NVIDIA-DeepStream%208.0%20|%209.0-76B900?logo=nvidia)](https://developer.nvidia.com/deepstream-sdk)
 [![TensorRT](https://img.shields.io/badge/TensorRT-10.x-orange)](https://developer.nvidia.com/tensorrt)
 
 Native GStreamer plugins that integrate **SAHI** (Slicing Aided Hyper Inference) into NVIDIA DeepStream for real-time small-object detection in high-resolution video streams.
@@ -157,59 +157,50 @@ deepstream-sahi/
 │   │   ├── gst-nvsahipreprocess/       # SAHI dynamic-slice pre-process plugin
 │   │   └── gst-nvsahipostprocess/      # SAHI GreedyNMM post-process plugin
 │   └── libs/
-│       ├── nvdsinfer/                   # Modified inference lib (smart engine caching)
-│       └── nvdsinfer_yolo/              # YOLO custom bounding-box parser
+│       ├── nvdsinfer_8.0/              # Modified inference lib for DS 8.x
+│       ├── nvdsinfer_9.0/              # Modified inference lib for DS 9.x
+│       └── nvdsinfer_yolo/             # YOLO custom bounding-box parser
 ├── python_test/
-│   ├── common/                          # Shared GStreamer utilities
-│   ├── deepstream-test-sahi/            # Test pipelines, configs, models
-│   │   └── models/                      # ONNX models (Git LFS) + labels
-│   └── videos/                          # Test videos (download separately)
-├── train_yolov9_visdrone/               # Training outputs (full-frame + sliced)
-├── test_results/                        # Evaluation CSVs and comparison reports
-├── docs/                                # Full documentation
-├── install.sh                           # One-step build and install
+│   ├── common/                         # Shared GStreamer utilities
+│   ├── deepstream-test-sahi/           # Test pipelines, configs, models
+│   │   └── models/                     # ONNX models (Git LFS) + labels
+│   └── videos/                         # Test videos (download separately)
+├── train_yolov9_visdrone/              # Training outputs (full-frame + sliced)
+├── test_results/                       # Evaluation CSVs and comparison reports
+├── docs/                               # Full documentation
+├── install.sh                          # One-step build and install
 └── README.md
 ```
 
 ## Prerequisites
 
-| Requirement | DeepStream 8.x | DeepStream 9.x |
+| Requirement | DeepStream 8.0 | DeepStream 9.0 |
 |-------------|----------------|----------------|
 | NVIDIA DeepStream SDK | 8.0 | 9.0 |
-| CUDA Toolkit | 12.x | 13.x |
-| TensorRT | 10.x | 10.x / 11.x |
-| GStreamer | 1.x (ships with DeepStream) | 1.x (ships with DeepStream) |
+| CUDA Toolkit | 12.8 | 13.1 |
+| TensorRT | 10.9.0 | 10.14.1 |
+| GStreamer | 1.24.2 (ships with DeepStream) | 1.24.2 (ships with DeepStream) |
 | Python Bindings | pyds 1.2.2 (pre-built) | built from source (`--build-bindings`) |
-| [Git LFS](https://git-lfs.com/) | 3.x | 3.x |
+
 
 > The `install.sh` script auto-detects the DeepStream version and adapts the build steps accordingly.
 
 ## Modified DeepStream Libraries
 
-### nvdsinfer — Smart Engine File Caching (DS 8.x only)
+### nvdsinfer — Smart Engine File Caching
 
-Adds intelligent TensorRT engine file naming and auto-discovery. Instead of rebuilding the `.engine` file on every pipeline start, it generates a standardized name encoding batch size, input dimensions, GPU model, compute capability, TensorRT version, and precision:
+The repository ships version-specific builds of the `nvdsinfer` library under `deepstream_source/libs/nvdsinfer_8.0/` and `deepstream_source/libs/nvdsinfer_9.0/`. The installer auto-detects the DeepStream version and copies the matching source into the build tree.
+
+Both versions add intelligent TensorRT engine file naming and auto-discovery. Instead of rebuilding the `.engine` file on every pipeline start, the library generates a standardized name encoding batch size, input dimensions, GPU model, compute capability, TensorRT version, and precision:
 
 ```
 {model}_b{batch}_i{W}x{H}_{compute_cap}_{gpu}_{trt_ver}_{precision}.engine
 ```
 
-See [`ENGINE_FILE_NAMING_FEATURE.md`](deepstream_source/libs/nvdsinfer/ENGINE_FILE_NAMING_FEATURE.md) for the full specification.
-
-> **Note:** This modified library is only built and installed on DeepStream 8.x. On DeepStream 9.x the stock `nvdsinfer` is used.
-
-> Forum discussion: [Smart Engine File Caching for nvdsinfer](https://forums.developer.nvidia.com/t/feature-contribution-smart-engine-file-caching-for-nvdsinfer/358537)
-
+ 
 ### nvdsinfer_yolo — YOLO Custom Bounding-Box Parser
 
-Custom parsing functions for YOLO models exported with **EfficientNMS_TRT** and **EfficientNMSX_TRT + ROIAlign_TRT** TensorRT plugins:
-
-| Function | Model Type |
-|----------|-----------|
-| `NvDsInferYoloNMS` | Detection |
-| `NvDsInferYoloMask` | Instance Segmentation |
-
-> Source: [levipereira/nvdsinfer_yolo](https://github.com/levipereira/nvdsinfer_yolo)
+Custom parsing functions for YOLO models exported with **EfficientNMS_TRT** and **EfficientNMSX_TRT + ROIAlign_TRT** TensorRT plugins.
 
 ## SAHI is a Full-Pipeline Strategy
 
