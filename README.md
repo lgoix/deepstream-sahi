@@ -83,7 +83,6 @@ For container variants, display notes, rebuild mode, and environment details, se
 | [Plugin Reference](docs/PLUGINS.md) | plugin properties and behavior |
 | [Training Guide](docs/TRAINING.md) | training workflow for sliced models |
 | [Test Results](docs/TEST_RESULTS.md) | evaluation data and charts |
-| [Technical Review](docs/REVIEW.md) | known issues, differences from SAHI Python, performance notes |
 
 ## Repository Structure
 
@@ -224,7 +223,7 @@ Training details are documented in `docs/TRAINING.md`.
 - Merged mask resolution is capped at 512x512 to prevent excessive memory allocation.
 - Only single-source pipelines have been validated end-to-end; multi-source is supported via OpenMP parallelism but has not been benchmarked.
 
-For the full technical review, see `docs/REVIEW.md`.
+See `docs/PLUGINS.md` for the full property reference and algorithm details.
 
 ## License
 
