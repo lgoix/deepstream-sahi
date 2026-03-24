@@ -256,6 +256,41 @@ Validates the built-in performance monitoring via GStreamer debug levels.
 | `nvsahipostprocess:5` (DEBUG) | + init config, transform\_ip calls |
 | `nvsahipostprocess:6` (LOG) | + per-frame NMM detail |
 
+### Measured Latency — `aerial_vehicles.mp4` (~311 dets/frame)
+
+Steady-state PERF samples (after TRT engine load):
+
+| Interval | Batches | Avg ms/frame | Total ms |
+|----------|---------|-------------|----------|
+| 1.0s | 28 | 0.198 | 5.5 |
+| 1.0s | 37 | 0.189 | 7.0 |
+| 1.0s | 38 | 0.193 | 7.3 |
+| 1.0s | 36 | 0.345 | 12.4 |
+| 1.0s | 36 | 0.481 | 17.3 |
+| 1.0s | 36 | 0.489 | 17.6 |
+| 1.0s | 36 | 0.527 | 19.0 |
+
+**Summary:** 0.19 – 0.53 ms/frame (median ~0.35 ms). The postprocess plugin adds
+negligible latency to the pipeline — well under 1 ms per frame at ~311 detections.
+
+### End-to-End Pipeline Performance — `aerial_vehicles.mp4`
+
+Full pipeline: decode → nvstreammux → nvsahipreprocess (9 slices) → nvinfer (TRT FP16) → nvsahipostprocess → nvdsosd → fakesink.
+
+| Metric | Value |
+|--------|-------|
+| Total frames | 482 |
+| Pipeline execution time | **16.1 s** |
+| **End-to-end FPS** | **29.9 fps** |
+| Slices per frame | 9 (8 tiles + 1 full-frame) |
+| Total slices processed | 4,338 |
+| Inference throughput | ~269 slices/s |
+| Postprocess avg latency | 0.35 ms/frame |
+| **Postprocess % of frame budget** | **1.0%** (0.35 / 33.4 ms) |
+
+At ~30 fps, the postprocess NMM contributes only 1% of the per-frame time budget.
+The pipeline bottleneck is TensorRT inference on 9 slices per frame.
+
 ### Sample Output (level 6)
 
 ```
@@ -266,7 +301,7 @@ DEBUG  nvsahipostprocess ... transform_ip: 1 frames in batch
 LOG    nvsahipostprocess ... frame 0: collected 311 dets (gie_filter_all=1)
 LOG    nvsahipostprocess ... frame 0: grid built 1920x1080, 311 rects
 LOG    nvsahipostprocess ... frame 0: 311 dets, 146 suppressed, 90 merged, 165 surviving
-INFO   nvsahipostprocess ... PERF 1.0s: 1 batches, 1 frames | avg 0.252 ms/batch ...
+INFO   nvsahipostprocess ... PERF 1.0s: 37 batches, 37 frames | avg 0.189 ms/batch, 0.189 ms/frame | total 7.0 ms
 ```
 
 All three levels produce expected output.
