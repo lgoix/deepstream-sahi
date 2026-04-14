@@ -1,6 +1,6 @@
 # DeepStream SAHI
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![License](https://img.shields.io/badge/License-NVIDIA%20DeepStream%20EULA-76B900.svg)](https://developer.nvidia.com/deepstream-eula)
 [![DeepStream](https://img.shields.io/badge/NVIDIA-DeepStream%208.0%20|%209.0-76B900?logo=nvidia)](https://developer.nvidia.com/deepstream-sdk)
 [![TensorRT](https://img.shields.io/badge/TensorRT-10.x-orange)](https://developer.nvidia.com/tensorrt)
 
@@ -40,7 +40,7 @@ Key points:
 | GStreamer | 1.24.2 | 1.24.2 |
 | Python bindings | `pyds 1.2.2` | built from source |
 
-The `install.sh` script detects the installed DeepStream version for Python bindings, builds the SAHI GStreamer plugins, and builds and installs **`libnvds_infer_yolo.so`** from `deepstream_source/libs/nvdsinfer_yolo`. That library is **required** to run the bundled ONNX models: they use TensorRT’s **EfficientNMS** post-processing, and this project’s parser decodes that output (it is not NVIDIA sample code; see `LICENSE` in that directory). Core TensorRT execution still uses the SDK’s `libnvds_infer.so` with `nvinfer` (not rebuilt here).
+The `install.sh` script detects the installed DeepStream version for Python bindings, builds the SAHI GStreamer plugins, and builds and installs **`libnvds_infer_yolo.so`** from `deepstream_source/libs/nvdsinfer_yolo`. That library is **required** to run the bundled ONNX models: they use TensorRT’s **EfficientNMS** post-processing, and this project’s parser decodes that output (it is not NVIDIA’s stock sample parser). Core TensorRT execution still uses the SDK’s `libnvds_infer.so` with `nvinfer` (not rebuilt here). Licensing: see `LICENSE` at the repository root and in `deepstream_source/libs/nvdsinfer_yolo/`.
 
 ## Quick Start
 
@@ -262,10 +262,6 @@ See `docs/PLUGINS.md` for the full property reference and algorithm details.
 
 ## License
 
-- `gst-nvsahipostprocess`: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
-- `gst-nvsahipreprocess`: [NVIDIA Proprietary](https://developer.nvidia.com/deepstream-eula)
-- `nvdsinfer_yolo`: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) (project-authored parser; see `deepstream_source/libs/nvdsinfer_yolo/LICENSE`)
-- `python_test/` scripts: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
-- `python_test/common/`: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+The project is distributed under the terms of the **[NVIDIA DeepStream SDK License Agreement](https://developer.nvidia.com/deepstream-eula)**. See the [`LICENSE`](LICENSE) file at the repository root.
 
-Use of DeepStream runtime components (`nvinfer`, TensorRT engines, NVIDIA sample libraries under `/opt/nvidia/deepstream/`, etc.) is subject to the [DeepStream license](https://developer.nvidia.com/deepstream-eula) from your SDK or container image.
+Some components carry additional notices in source headers (for example, derivative works of NVIDIA DeepStream samples in `gst-nvsahipreprocess`, or third-party copyright lines in `python_test/common/`). Preserve those notices when redistributing.

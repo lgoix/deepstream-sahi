@@ -96,7 +96,7 @@ This runs only step 3 (build + install), skipping steps 1, 2, and 4.
 | `libnvdsgst_sahipostprocess.so` | SAHI GreedyNMM post-process plugin |
 | `libnvds_infer_yolo.so` | **Required** custom parser (built from `deepstream_source/libs/nvdsinfer_yolo`) — decodes **EfficientNMS** TRT output for the bundled YOLO models; not optional for those configs |
 
-TensorRT core inference uses the DeepStream SDK’s `libnvds_infer.so` and `nvinfer` (not replaced by this project). The `nvdsinfer_yolo` sources in this repo are Apache-2.0 project code (they are not NVIDIA’s stock sample parser).
+TensorRT core inference uses the DeepStream SDK’s `libnvds_infer.so` and `nvinfer` (not replaced by this project). The `nvdsinfer_yolo` sources are a custom EfficientNMS parser (not NVIDIA’s stock sample); licensing follows the [DeepStream EULA](https://developer.nvidia.com/deepstream-eula) — see `LICENSE` in the repository root.
 
 ### Environment Variables
 

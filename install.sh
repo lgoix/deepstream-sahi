@@ -163,7 +163,7 @@ fi
 # ══════════════════════════════════════════════════════════════════════════════
 # libnvds_infer.so comes from the DeepStream SDK (this repo does not ship nvdsinfer sources).
 # libnvds_infer_yolo.so is built from deepstream_source/libs/nvdsinfer_yolo — required for bundled
-# models using EfficientNMS_TRT output (project-authored parser, Apache-2.0).
+# models using EfficientNMS_TRT output (custom parser; see repository LICENSE / DeepStream EULA).
 
 if $PLUGINS_ONLY; then
     step "Building SAHI plugins and nvdsinfer_yolo"
