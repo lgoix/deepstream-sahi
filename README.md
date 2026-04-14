@@ -40,7 +40,7 @@ Key points:
 | GStreamer | 1.24.2 | 1.24.2 |
 | Python bindings | `pyds 1.2.2` | built from source |
 
-The `install.sh` script detects the installed DeepStream version and selects the matching sources.
+The `install.sh` script detects the installed DeepStream version for Python bindings, builds the SAHI GStreamer plugins, and builds and installs **`libnvds_infer_yolo.so`** from `deepstream_source/libs/nvdsinfer_yolo`. That library is **required** to run the bundled ONNX models: they use TensorRT’s **EfficientNMS** post-processing, and this project’s parser decodes that output (it is not NVIDIA sample code; see `LICENSE` in that directory). Core TensorRT execution still uses the SDK’s `libnvds_infer.so` with `nvinfer` (not rebuilt here).
 
 ## Quick Start
 
@@ -95,8 +95,6 @@ deepstream-sahi/
 │   │   ├── gst-nvsahipreprocess/
 │   │   └── gst-nvsahipostprocess/
 │   └── libs/
-│       ├── nvdsinfer_8.0/
-│       ├── nvdsinfer_9.0/
 │       └── nvdsinfer_yolo/
 ├── python_test/
 │   ├── common/
@@ -129,19 +127,10 @@ deepstream-sahi/
 - parallel per-frame processing via OpenMP
 - configurable merge strategy (union / weighted / largest)
 
-### `nvdsinfer`
+### Inference (`nvinfer`) and `nvdsinfer_yolo`
 
-The repository includes version-specific `nvdsinfer` sources under `deepstream_source/libs/nvdsinfer_8.0/` and `deepstream_source/libs/nvdsinfer_9.0/`.
-
-The modified implementation adds engine naming and lookup logic to avoid rebuilding TensorRT engines unnecessarily. The generated name follows this format:
-
-```text
-{model}_b{batch}_i{W}x{H}_{compute_cap}_{gpu}_{trt_ver}_{precision}.engine
-```
-
-### `nvdsinfer_yolo`
-
-Custom parsing functions for YOLO models exported with `EfficientNMS_TRT` and `EfficientNMSX_TRT + ROIAlign_TRT`.
+- **`nvinfer` / `libnvds_infer.so`:** from the DeepStream SDK (unchanged by this repo).
+- **`libnvds_infer_yolo.so`:** built from this repository’s `deepstream_source/libs/nvdsinfer_yolo/`. **Not optional** for the default pipelines: the shipped models are exported with **EfficientNMS** (`EfficientNMS_TRT` / related ops), and this custom parser implements the bounding-box decoding for that layout. The sample PGIE configs set `custom-lib-path` to `.../libnvds_infer_yolo.so`.
 
 ## Results Summary
 
@@ -275,6 +264,8 @@ See `docs/PLUGINS.md` for the full property reference and algorithm details.
 
 - `gst-nvsahipostprocess`: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - `gst-nvsahipreprocess`: [NVIDIA Proprietary](https://developer.nvidia.com/deepstream-eula)
-- `nvdsinfer` and `nvdsinfer_yolo`: [NVIDIA Proprietary](https://developer.nvidia.com/deepstream-eula)
+- `nvdsinfer_yolo`: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) (project-authored parser; see `deepstream_source/libs/nvdsinfer_yolo/LICENSE`)
 - `python_test/` scripts: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - `python_test/common/`: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+Use of DeepStream runtime components (`nvinfer`, TensorRT engines, NVIDIA sample libraries under `/opt/nvidia/deepstream/`, etc.) is subject to the [DeepStream license](https://developer.nvidia.com/deepstream-eula) from your SDK or container image.
