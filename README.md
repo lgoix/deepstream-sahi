@@ -27,18 +27,18 @@ Key points:
 
 - SAHI slicing implemented as DeepStream plugins
 - TensorRT inference handled by `nvinfer`
-- Support for DeepStream 8.x and 9.x
+- Support for DeepStream 7.1. For DeepStream 8.x and 9.x, see https://github.com/levipereira/deepstream-sahi
 - Test scripts and sample models included in the repository
 
 ## Compatibility
 
-| Component | DeepStream 8.0 | DeepStream 9.0 |
-|-----------|----------------|----------------|
-| DeepStream SDK | 8.0 | 9.0 |
-| CUDA Toolkit | 12.8 | 13.1 |
-| TensorRT | 10.9.0 | 10.14.1 |
-| GStreamer | 1.24.2 | 1.24.2 |
-| Python bindings | `pyds 1.2.2` | built from source |
+| Component | DeepStream 7.1 |
+|-----------|----------------|
+| DeepStream SDK | 7.1 |
+| CUDA Toolkit | 12.6 |
+| TensorRT | 10.3.0 |
+| GStreamer | 1.20.3 |
+| Python bindings | `pyds 1.2.0` |
 
 The `install.sh` script detects the installed DeepStream version for Python bindings, builds the SAHI GStreamer plugins, and builds and installs **`libnvds_infer_yolo.so`** from `deepstream_source/libs/nvdsinfer_yolo`. That library is **required** to run the bundled ONNX models: they use TensorRT’s **EfficientNMS** post-processing, and this project’s parser decodes that output (it is not NVIDIA’s stock sample parser). Core TensorRT execution still uses the SDK’s `libnvds_infer.so` with `nvinfer` (not rebuilt here). Licensing: see `LICENSE` at the repository root and in `deepstream_source/libs/nvdsinfer_yolo/`.
 
