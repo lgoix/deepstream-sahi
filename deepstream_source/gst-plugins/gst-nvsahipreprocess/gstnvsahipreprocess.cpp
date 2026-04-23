@@ -904,8 +904,6 @@ gst_nvsahipreprocess_start (GstBaseTransform *btrans)
       self->tensor_params.buffer_size *= 4; break;
     case NvDsDataType_UINT8: case NvDsDataType_INT8:
       self->tensor_params.buffer_size *= 1; break;
-    case NvDsDataType_UINT64: case NvDsDataType_INT64:
-      self->tensor_params.buffer_size *= 8; break;
     case NvDsDataType_FP16:
       self->tensor_params.buffer_size *= 2; break;
     default:
