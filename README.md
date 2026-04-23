@@ -1,7 +1,7 @@
 # DeepStream SAHI
 
 [![License](https://img.shields.io/badge/License-NVIDIA%20DeepStream%20EULA-76B900.svg)](https://developer.nvidia.com/deepstream-eula)
-[![DeepStream](https://img.shields.io/badge/NVIDIA-DeepStream%208.0%20|%209.0-76B900?logo=nvidia)](https://developer.nvidia.com/deepstream-sdk)
+[![DeepStream](https://img.shields.io/badge/NVIDIA-DeepStream%207.1%20-76B900?logo=nvidia)](https://developer.nvidia.com/deepstream-sdk)
 [![TensorRT](https://img.shields.io/badge/TensorRT-10.x-orange)](https://developer.nvidia.com/tensorrt)
 
 GStreamer plugins that bring [SAHI](https://github.com/obss/sahi) slicing to NVIDIA DeepStream. The project keeps slicing, inference, and merge steps inside the DeepStream pipeline, using `nvinfer` for TensorRT execution and `NvDsObjectMeta` for post-processing.
