@@ -18,9 +18,9 @@ Environment variables:
   DS_ROOT          DeepStream root (default: /opt/nvidia/deepstream/deepstream)
   CUDA_VER         CUDA version (default: auto-detected from nvcc)
   PYDS_VERSION     DeepStream Python bindings version
-                   (default: 1.2.2 for DS 8.x, ignored for DS 9.x)
+                   (1.2.0 for  DS 7.1)
 
-Supported DeepStream versions: 8.x, 9.x
+Supported DeepStream versions: 7.1
 EOF
     exit 0
 }
@@ -72,14 +72,14 @@ fi
 
 DS_MAJOR=$(echo "$DS_VERSION" | cut -d. -f1)
 
-if [[ "$DS_MAJOR" -ne 8 && "$DS_MAJOR" -ne 9 ]]; then
-    error "Unsupported DeepStream version ${DS_VERSION}. Only 8.x and 9.x are supported."
+if [[ "$DS_MAJOR" -ne 7 ]]; then
+    error "Unsupported DeepStream version ${DS_VERSION}. Only 7.x is supported."
 fi
 
 info "Detected DeepStream ${DS_VERSION} (major=${DS_MAJOR})"
 
-if [[ "$DS_MAJOR" -eq 8 ]]; then
-    PYDS_VERSION="${PYDS_VERSION:-1.2.2}"
+if [[ "$DS_MAJOR" -eq 7 ]]; then
+    PYDS_VERSION="${PYDS_VERSION:-1.2.0}"
 fi
 
 # ── Prerequisites ─────────────────────────────────────────────────────────────
