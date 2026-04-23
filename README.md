@@ -6,6 +6,11 @@
 
 GStreamer plugins that bring [SAHI](https://github.com/obss/sahi) slicing to NVIDIA DeepStream. The project keeps slicing, inference, and merge steps inside the DeepStream pipeline, using `nvinfer` for TensorRT execution and `NvDsObjectMeta` for post-processing.
 
+For the moment, the plugins-Only Mode install is working:
+```bash
+/apps/deepstream-sahi/install.sh --plugins-only
+```
+
 ## Overview
 
 This repository provides two plugins:
